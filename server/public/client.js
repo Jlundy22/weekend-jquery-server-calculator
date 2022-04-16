@@ -9,6 +9,7 @@ function onReady() {
     $('#divideButton').on('click', divideButtonClick );
     $('#equalButton').on('click', equalsButtonClick );
     $('#clearButton').on('click', clearButtonClick );
+    getHistory();
 }
 
 function plusButtonClick() {
@@ -29,22 +30,31 @@ function divideButtonClick() {
 }
 
 function equalsButtonClick() {
+    if($('#firstNumberInput').val() === '' || $('#secondNumberInput').val() === '') {
+        $('#mostRecentAnswer').empty();
+        $('#mostRecentAnswer').append('Fill in all inputs!');
+        return;
+    };
     let mathObject = {
         numOne: $('#firstNumberInput').val(),
         numTwo: $('#secondNumberInput').val(),
         operator: operator
     };
+     $('#firstNumberInput').val(''),
+     $('#secondNumberInput').val(''),
+
     $.ajax({
         method: 'POST',
         url: '/calculate',
         data: mathObject
     }).then(function (response) {
         getResponse();
+      }).catch(function(error) {
+          console.log(error)
       })
 }
 
 function clearButtonClick() {
-    console.log('clear button clicked');
     $('#firstNumberInput').val('');
     $('#secondNumberInput').val('');
 }
@@ -54,7 +64,22 @@ function getResponse() {
         method: 'GET',
         url: '/calculation'
       }).then(function (response) {
-        console.log('the server sent me a guess evaluation');
-        console.log(response);
-      })
+        $('#mostRecentAnswer').empty();
+        $('#mostRecentAnswer').append(response.answer);
+        getHistory()
+    })
+}
+
+function getHistory() {
+    $.ajax({
+        method: 'GET',
+        url: '/history'
+      }).then(function (response) {
+          $('#answersList').empty();
+        for (let answer of response.pastCalculations) {
+            $('#answersList').append(`<li>${answer}</li>`);
+        }
+    }).catch(function(error) {
+        console.log(error)
+    })
 }
