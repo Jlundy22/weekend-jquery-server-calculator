@@ -1,7 +1,4 @@
 let operator;
-let firstNumber;
-let secondNumber
-
 
 $(document).ready(onReady);
 
@@ -16,30 +13,33 @@ function onReady() {
 
 function plusButtonClick() {
     operator = '+';
-    console.log(operator);
 }
 
 function minusButtonClick() {
     operator = '-';
-    console.log(operator)
 }
 
 function multiplicationButtonClick() {
     operator = '*';
-    console.log(operator);
+
 }
 
 function divideButtonClick() {
     operator = '/';
-    console.log(operator);
 }
 
 function equalsButtonClick() {
     console.log('equals button clicked');
-    firstNumber = $('#firstNumberInput').val();
-    secondNumber = $('#secondNumberInput').val();
-    console.log(firstNumber);
-    console.log(secondNumber);
+    let mathObject = {
+        numOne: $('#firstNumberInput').val(),
+        numTwo: $('#secondNumberInput').val(),
+        operator: operator
+    };
+    $.ajax({
+        method: 'POST',
+        url: '/calculate',
+        data: mathObject
+    })
 }
 
 function clearButtonClick() {

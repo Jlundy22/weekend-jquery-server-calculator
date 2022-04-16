@@ -22,4 +22,38 @@ app.listen(PORT, () => {
   console.log ('Server is running on port', PORT)
 })
 
+let answer ;
 
+
+
+app.post('/calculate', (req, res) => {
+    let data = req.body;
+    console.log(data);
+    const numOne = Number(req.body.numOne);
+    const numTwo = Number(req.body.numTwo);
+    const operator = req.body.operator;
+    console.log(numOne);
+    console.log(numTwo);
+    console.log(operator);
+    
+    switch (operator) {
+    case '+':
+        answer = numOne + numTwo;
+        break;
+    case '-':
+        answer = numOne - numTwo;;
+        break;
+    case '*':
+        answer = numOne * numTwo;
+        break;
+    case '/':
+        answer = numOne / numTwo;
+     break;
+     default:
+        console.log(`Error recieving calculation data`);
+    }
+    console.log(answer);
+
+
+    res.sendStatus(200);
+})
