@@ -23,7 +23,7 @@ app.listen(PORT, () => {
 })
 
 let answer ;
-
+const pastCalculations = []
 
 
 app.post('/calculate', (req, res) => {
@@ -53,7 +53,16 @@ app.post('/calculate', (req, res) => {
         console.log(`Error recieving calculation data`);
     }
     console.log(answer);
+    pastCalculations.push(`${numOne} ${operator} ${numTwo} = ${answer}`);
+    console.log(pastCalculations);
 
 
     res.sendStatus(200);
+})
+
+app.get('/calculation', (req, res) => {
+    res.send({
+        answer: answer,
+        pastCalculations: pastCalculations
+    })
 })

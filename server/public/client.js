@@ -29,7 +29,6 @@ function divideButtonClick() {
 }
 
 function equalsButtonClick() {
-    console.log('equals button clicked');
     let mathObject = {
         numOne: $('#firstNumberInput').val(),
         numTwo: $('#secondNumberInput').val(),
@@ -39,11 +38,23 @@ function equalsButtonClick() {
         method: 'POST',
         url: '/calculate',
         data: mathObject
-    })
+    }).then(function (response) {
+        getResponse();
+      })
 }
 
 function clearButtonClick() {
     console.log('clear button clicked');
     $('#firstNumberInput').val('');
     $('#secondNumberInput').val('');
+}
+
+function getResponse() {
+    $.ajax({
+        method: 'GET',
+        url: '/calculation'
+      }).then(function (response) {
+        console.log('the server sent me a guess evaluation');
+        console.log(response);
+      })
 }
