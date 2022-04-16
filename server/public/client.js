@@ -3,12 +3,12 @@ let operator;
 $(document).ready(onReady);
 
 function onReady() {
-    $('#plusButton').on('click', plusButtonClick );
-    $('#minusButton').on('click', minusButtonClick );
+    $('#plusButton').on('click', plusButtonClick);
+    $('#minusButton').on('click', minusButtonClick);
     $('#multiplicationButton').on('click', multiplicationButtonClick);
-    $('#divideButton').on('click', divideButtonClick );
-    $('#equalButton').on('click', equalsButtonClick );
-    $('#clearButton').on('click', clearButtonClick );
+    $('#divideButton').on('click', divideButtonClick);
+    $('#equalButton').on('click', equalsButtonClick);
+    $('#clearButton').on('click', clearButtonClick);
     getHistory();
 }
 
@@ -30,28 +30,30 @@ function divideButtonClick() {
 }
 
 function equalsButtonClick() {
-    if($('#firstNumberInput').val() === '' || $('#secondNumberInput').val() === '') {
-        $('#mostRecentAnswer').empty();
-        $('#mostRecentAnswer').append('Fill in all inputs!');
-        return;
-    };
     let mathObject = {
         numOne: $('#firstNumberInput').val(),
         numTwo: $('#secondNumberInput').val(),
         operator: operator
     };
-     $('#firstNumberInput').val(''),
-     $('#secondNumberInput').val(''),
 
-    $.ajax({
-        method: 'POST',
-        url: '/calculate',
-        data: mathObject
-    }).then(function (response) {
-        getResponse();
-      }).catch(function(error) {
-          console.log(error)
-      })
+    if ($('#firstNumberInput').val() === '' || $('#secondNumberInput').val() === '') {
+        $('#mostRecentAnswer').empty();
+        $('#mostRecentAnswer').append('Fill in all inputs!');
+        return;
+    };
+
+    $('#firstNumberInput').val(''),
+        $('#secondNumberInput').val(''),
+
+        $.ajax({
+            method: 'POST',
+            url: '/calculate',
+            data: mathObject
+        }).then(function () {
+            getResponse();
+        }).catch(function (error) {
+            console.log(error)
+        })
 }
 
 function clearButtonClick() {
@@ -63,10 +65,10 @@ function getResponse() {
     $.ajax({
         method: 'GET',
         url: '/calculation'
-      }).then(function (response) {
+    }).then(function (response) {
         $('#mostRecentAnswer').empty();
         $('#mostRecentAnswer').append(response.answer);
-        getHistory()
+        getHistory();
     })
 }
 
@@ -74,12 +76,12 @@ function getHistory() {
     $.ajax({
         method: 'GET',
         url: '/history'
-      }).then(function (response) {
-          $('#answersList').empty();
+    }).then(function (response) {
+        $('#answersList').empty();
         for (let answer of response.pastCalculations) {
             $('#answersList').append(`<li>${answer}</li>`);
         }
-    }).catch(function(error) {
-        console.log(error)
+    }).catch(function (error) {
+        console.log(error);
     })
 }
