@@ -25,6 +25,14 @@ app.listen(PORT, () => {
 let answer;
 const pastCalculations = [];
 
+
+// app.post will recieve the new calculation from the .ajax POST
+// request from client.js
+// creates variables from the new object that was sent over
+// the switch statment will check which operator was used and  
+// will then do the correct math and update the answer variable 
+// a string of the caclulation and answer is then pushed into the array of:
+// pastCalculations
 app.post('/calculate', (req, res) => {
     let data = req.body;
     const numOne = Number(req.body.numOne);
@@ -51,12 +59,15 @@ app.post('/calculate', (req, res) => {
     res.sendStatus(200);
 })
 
+
+// sends the most recent answer back to client.js
 app.get('/calculation', (req, res) => {
     res.send({
         answer: answer
     })
 })
 
+// sends the updated pastCalculations array back to client.js
 app.get('/history', (req, res) => {
     res.send({
         pastCalculations: pastCalculations
